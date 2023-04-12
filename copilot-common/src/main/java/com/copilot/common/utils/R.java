@@ -6,7 +6,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.http.HttpStatus;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -20,39 +19,38 @@ import java.io.Serializable;
 @Getter
 @ToString
 @Accessors(chain = true)
-public class R implements Serializable {
+public class R<T> implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
 
-    private int code = 200;
+    private int code = HttpStatus.OK.value();
     private String msg;
-    private Object data;
+    private T data;
 
-    public static R ok() {
-        R r = new R();
+    public static <T> R<T> ok() {
+        R<T> r = new R<>();
         r.setMsg("操作成功");
         return r;
     }
 
-    public static R ok(Object data) {
-        R r = new R();
+    public static <T> R<T> ok(T data) {
+        R<T> r = new R<>();
         r.setMsg("操作成功");
         r.setData(data);
         return r;
     }
 
-    public static R error() {
+    public static <T> R<T> error() {
         return error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "未知异常，请联系管理员");
     }
 
-    public static R error(String msg) {
+    public static <T> R<T> error(String msg) {
         return error(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg);
     }
 
-    public static R error(int code, String msg) {
-        R r = new R();
+    public static <T> R<T> error(int code, String msg) {
+        R<T> r = new R<>();
         r.setCode(code);
         r.setMsg(msg);
         return r;

@@ -1,1 +1,14 @@
+server:
+  port: 9001
 
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:mysql://124.71.168.56:13306/copilot
+    username: root
+    password: 28672867
+
+jwt:
+  header: Authorization
+  tokenHead: 'Bearer '
