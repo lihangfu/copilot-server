@@ -1,15 +1,19 @@
 package com.copilot.modules.security.config;
 
 import com.copilot.modules.security.handle.AuthenticationEntryPointImpl;
+import com.copilot.modules.security.handle.CustomDaoAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.annotation.Resource;
 
 /**
  * @program: copilot-server
@@ -21,6 +25,9 @@ import org.springframework.security.web.SecurityFilterChain;
 // 开启 Spring Security
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Resource
+    UserDetailsService userDetailsService;
 
     /**
      * 获取AuthenticationManager（认证管理器），登录时认证使用
@@ -60,5 +67,13 @@ public class SecurityConfig {
                 .exceptionHandling(configurer -> configurer
                         .authenticationEntryPoint(new AuthenticationEntryPointImpl()));
         return http.build();
+    }
+
+    @Bean
+    public CustomDaoAuthenticationProvider daoAuthenticationProvider() {
+        CustomDaoAuthenticationProvider provider = new CustomDaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
 }

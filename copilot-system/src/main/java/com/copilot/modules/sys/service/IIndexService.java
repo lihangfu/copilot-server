@@ -8,5 +8,5 @@ public interface IIndexService {
      * @param password password
      * @return token
      */
-    String login(String username, String password);
+    String login(String username, String password, Long currentTimestamp);
 }
