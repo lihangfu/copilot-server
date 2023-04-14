@@ -19,6 +19,4 @@ public interface ISysUserService extends IService<SysUser> {
      * @return
      */
     SysUser findSecurityUserByUser(SysUser sysUser);
-
-    String login(String username, String password);
 }

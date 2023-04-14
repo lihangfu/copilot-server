@@ -1,19 +1,15 @@
 package com.copilot.modules.security.config;
 
+import com.copilot.modules.security.handle.AuthenticationEntryPointImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.util.Collections;
 
 /**
  * @program: copilot-server
@@ -25,6 +21,18 @@ import java.util.Collections;
 // 开启 Spring Security
 @EnableWebSecurity
 public class SecurityConfig {
+
+    /**
+     * 获取AuthenticationManager（认证管理器），登录时认证使用
+     *
+     * @param authenticationConfiguration authenticationConfiguration
+     * @return authenticationManager
+     * @throws Exception Exception
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
     /**
      * 配置密码管理器
@@ -47,30 +55,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .maximumSessions(1)
                 );
+        // 异常处理
+        http
+                .exceptionHandling(configurer -> configurer
+                        .authenticationEntryPoint(new AuthenticationEntryPointImpl()));
         return http.build();
     }
-
-    /**
-     * 使用自定义的 userDetailsService 和 passwordEncoder 进行用户认证
-     *
-     * @return AuthenticationProvider
-     */
-    @Bean
-    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
-        return provider;
-    }
-
-    /**
-     * @param authenticationProvider 是AuthenticationManager 的实现
-     * @return AuthenticationManager
-     * @throws Exception Exception
-     */
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationProvider authenticationProvider) throws Exception {
-        return new ProviderManager(Collections.singletonList(authenticationProvider));
-    }
-
 }

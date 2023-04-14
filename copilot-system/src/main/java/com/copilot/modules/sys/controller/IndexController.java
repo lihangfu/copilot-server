@@ -2,7 +2,7 @@ package com.copilot.modules.sys.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.copilot.common.utils.R;
-import com.copilot.modules.sys.service.ISysUserService;
+import com.copilot.modules.sys.service.IIndexService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
 
     @Resource
-    private ISysUserService userService;
+    private IIndexService indexService;
 
     @GetMapping("/test")
     private R<String> test() {
@@ -39,6 +39,6 @@ public class IndexController {
         if (StrUtil.isNotEmpty(token)) {
             return R.ok(token);
         }
-        return R.ok(userService.login(username, password));
+        return R.ok(indexService.login(username, password));
     }
 }
