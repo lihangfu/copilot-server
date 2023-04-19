@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 /**
  * @program: copilot-server
- * @description: 认证失败
+ * @description: 用于处理未经过身份验证的用户请求受保护资源时触发的异常。它的作用是将用户重定向到登录页面或向用户返回未经授权的错误消息。
  * @author: hfli8
  * @create: 2023/4/13 19:09
  */

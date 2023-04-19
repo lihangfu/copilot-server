@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /**
  * @program: copilot-server
- * @description: TODO
+ * @description: 登录用户信息
  * @author: hfli8
  * @create: 2023/4/11 14:43
  */
@@ -48,12 +48,12 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     /**

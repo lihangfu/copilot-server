@@ -22,7 +22,7 @@ public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
             throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
         } else {
             // 校验登录时间是否过期
-            if (System.currentTimeMillis() - passwordAuthentication.getCurrentTimestamp() > 60000) {
+            if (System.currentTimeMillis() - passwordAuthentication.getCurrentTimestamp() > 600000) {
                 throw new BadCredentialsException("登录时间已过期");
             }
             String presentedPassword = passwordAuthentication.getCredentials().toString();
