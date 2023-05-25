@@ -3,6 +3,7 @@ package com.copilot.modules.security.config;
 import com.copilot.modules.security.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.copilot.modules.security.filter.JwtAuthenticationTokenFilter;
 import com.copilot.modules.security.handle.AuthenticationEntryPointImpl;
+import com.copilot.modules.security.handle.CustomAuthenticationFailureHandler;
 import com.copilot.modules.security.handle.CustomAuthenticationSuccessHandler;
 import com.copilot.modules.security.handle.CustomDaoAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,9 @@ public class SecurityConfig {
 
     @Resource
     CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Resource
+    CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Resource
     JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
@@ -107,6 +111,7 @@ public class SecurityConfig {
         CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManager);
         filter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler);
+        filter.setAuthenticationFailureHandler(customAuthenticationFailureHandler);
         return filter;
     }
 }
