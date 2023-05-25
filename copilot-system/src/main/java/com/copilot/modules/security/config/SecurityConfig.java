@@ -67,7 +67,7 @@ public class SecurityConfig {
                 // 在登录之前进行 jwt 校验
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 权限管理
-                .authorizeRequests(registry -> registry.antMatchers("/test", "/login").denyAll().anyRequest().authenticated())
+                .authorizeRequests(registry -> registry.antMatchers("/test", "/login").anonymous().anyRequest().authenticated())
                 // 异常处理
                 .exceptionHandling(configurer -> configurer
                         // 权限认证失败

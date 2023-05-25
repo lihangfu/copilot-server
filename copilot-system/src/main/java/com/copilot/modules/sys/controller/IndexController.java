@@ -1,12 +1,8 @@
 package com.copilot.modules.sys.controller;
 
 import com.copilot.common.utils.R;
-import com.copilot.modules.sys.service.IIndexService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * @program: copilot-server
@@ -14,12 +10,8 @@ import javax.annotation.Resource;
  * @author: hfli8
  * @create: 2023/4/12 14:17
  */
-@Slf4j
 @RestController
 public class IndexController {
-
-    @Resource
-    private IIndexService indexService;
 
     @GetMapping("/test")
     private R<String> test() {

@@ -10,3 +10,6 @@ spring:
 jwt:
   header: Authorization
   tokenHead: 'Bearer '
+logging:
+  level:
+    org.springframework.security: DEBUG
