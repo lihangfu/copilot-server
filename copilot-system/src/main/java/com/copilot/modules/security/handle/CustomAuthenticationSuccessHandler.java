@@ -23,7 +23,6 @@ import java.io.IOException;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        Object principal = authentication.getPrincipal();
         SecurityUser userDetail = (SecurityUser) authentication.getPrincipal();
         //存储认证信息
         SecurityContextHolder.getContext().setAuthentication(authentication);

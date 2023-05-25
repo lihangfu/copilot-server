@@ -1,14 +1,12 @@
 package com.copilot.modules.security.filter;
 
 import com.copilot.modules.security.bean.UsernamePasswordAuthentication;
-import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.wildfly.common.annotation.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,13 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Setter
     private boolean postOnly = true;
-    @Getter
-    private String currentTimestampParameter = "currentTimestamp";
-
-    @NotNull
-    protected Long obtainCurrentTimestamp(HttpServletRequest request) {
-        return Long.valueOf(request.getParameter(this.currentTimestampParameter));
-    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -39,9 +30,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
             username = username != null ? username.trim() : "";
             String password = this.obtainPassword(request);
             password = password != null ? password : "";
-            Long currentTimestamp = this.obtainCurrentTimestamp(request);
-            currentTimestamp = currentTimestamp != null ? currentTimestamp : 0;
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthentication(username, password, currentTimestamp);
+            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthentication(username, password);
             this.setDetails(request, authRequest);
             return this.getAuthenticationManager().authenticate(authRequest);
         }

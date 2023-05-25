@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/copilot
+    url: jdbc:mysql://124.71.168.56:13306/copilot
     username: root
-    password: 123456
+    password: 28672867
 
 jwt:
   header: Authorization

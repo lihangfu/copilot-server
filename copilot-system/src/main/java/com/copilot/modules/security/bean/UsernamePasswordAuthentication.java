@@ -1,6 +1,5 @@
 package com.copilot.modules.security.bean;
 
-import lombok.Getter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 /**
@@ -10,11 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
  * @create: 2023/4/14 16:57
  */
 public class UsernamePasswordAuthentication extends UsernamePasswordAuthenticationToken {
-    @Getter
-    private final Long currentTimestamp;
-
-    public UsernamePasswordAuthentication(Object principal, Object credentials, Long currentTimestamp) {
+    public UsernamePasswordAuthentication(Object principal, Object credentials) {
         super(principal, credentials);
-        this.currentTimestamp = currentTimestamp;
     }
 }

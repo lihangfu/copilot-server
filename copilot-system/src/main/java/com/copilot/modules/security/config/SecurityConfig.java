@@ -11,9 +11,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -41,43 +42,28 @@ public class SecurityConfig {
     JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     /**
-     * 获取AuthenticationManager（认证管理器），登录时认证使用
-     *
-     * @param authenticationConfiguration authenticationConfiguration
-     * @return authenticationManager
-     * @throws Exception Exception
-     */
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    /**
      * 配置密码管理器
      *
      * @return PasswordEncoder
      */
     @Bean
     public static PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, CustomUsernamePasswordAuthenticationFilter filter) throws Exception {
         http
                 // 基于 token，不需要 csrf
-                .csrf().disable()
+                .csrf(AbstractHttpConfigurer::disable)
                 // 基于 token，不需要 session
-                .sessionManagement(configurer -> configurer
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 自定义 登录过滤器
+                .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 自定义登录过滤器
                 .addFilterAt(filter, UsernamePasswordAuthenticationFilter.class)
                 // 在登录之前进行 jwt 校验
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 权限管理
-                .authorizeRequests(registry -> registry
-                        .antMatchers("/test", "/login").denyAll()
-                        .anyRequest().authenticated())
+                .authorizeRequests(registry -> registry.antMatchers("/test", "/login").denyAll().anyRequest().authenticated())
                 // 异常处理
                 .exceptionHandling(configurer -> configurer
                         // 权限认证失败
@@ -99,10 +85,22 @@ public class SecurityConfig {
     }
 
     /**
+     * 获取AuthenticationManager（认证管理器），登录时认证使用
+     *
+     * @param authenticationConfiguration authenticationConfiguration
+     * @return authenticationManager
+     * @throws Exception Exception
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    /**
      * 自定义登录请求过滤器
      *
-     * @param authenticationManager
-     * @return
+     * @param authenticationManager authenticationManager
+     * @return CustomUsernamePasswordAuthenticationFilter
      */
     @Bean
     public CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
