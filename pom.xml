@@ -8,7 +8,9 @@
     <artifactId>copilot-server</artifactId>
     <version>0.0.1</version>
     <modules>
-        <module>copilot-common</module>
+        <module>copilot-api</module>
+        <module>copilot-web</module>
+        <module>copilot-service</module>
     </modules>
     <!--  父项目  -->
     <packaging>pom</packaging>
